@@ -310,7 +310,7 @@ async def enquete(interaction: discord.Interaction, *, pergunta: str, descricao:
         await msg.add_reaction("👎")
         await msg.add_reaction("🤷")
     else:
-        msg = await interaction.channel.send(embed=embed)    
+        msg = await interaction.channel.send(embed=embed)   
 
 #endregion SETUP PARA SUPORTE
 
