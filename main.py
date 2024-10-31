@@ -30,7 +30,7 @@ async def on_ready():
     # bot.tree.sync(guild=GUILD_ID)
     await bot.tree.sync()
     print(f"A {bot.user.name} está online!")
-
+    
 #region COMANDO DE SHIPPAR
 
 @bot.tree.command(name = 'ship', description='Cheque se alguém é sua alma gêmea')
@@ -78,51 +78,51 @@ async def ship(interaction: discord.Interaction,usuario1: discord.User,usuario2:
     await interaction.response.send_message(f"**Será que vamos ter um casal novo por aqui?**\n {usuario1.mention} + {usuario2.mention} = ✨ `{nomeship}` ✨\n{mensagem_extra}",file=discord.File(fp=buffer,filename="file.png"))
 #endregion COMANDO DE SHIPPAR
 
-#region Código CHATGPT 
+#region Código CHATGPT (NÃO TA FUNCIONANDO VAMOS USAR OLLAMA)
 
 # Busca o histórico de mensagens do canal, sendo o limite 1.
-async def buscar_historico_canal(canal,limit=1):
-        messages_list = []
+# async def buscar_historico_canal(canal,limit=1):
+#         messages_list = []
 
-        async for message in canal.history(limit=limit):
-            messages_list.append(
-                {
-                    "role":"user" if message.author.bot!=True else "system",
-                    "content": message.content
-                }
-            )
-        return messages_list
+#         async for message in canal.history(limit=limit):
+#             messages_list.append(
+#                 {
+#                     "role":"user" if message.author.bot!=True else "system",
+#                     "content": message.content
+#                 }
+#             )
+#         return messages_list
 
-# Conexão com a Open
-def ask_gpt(mensagens):
-    try:
-        response = openai.ChatCompletion.create(
-            messages=mensagens,
-            model="gpt-3.5-turbo-16k",
-            temperature=1,
-            max_tokens=500,
-        )
+# # Conexão com a Open
+# def ask_gpt(mensagens):
+#     try:
+#         response = openai.ChatCompletion.create(
+#             messages=mensagens,
+#             model="gpt-3.5-turbo-16k",
+#             temperature=1,
+#             max_tokens=500,
+#         )
 
-        return response.choices[0].message.content
-    except:
-        return "Perdão. Ocorreu um erro, tente novamente em um minuto."
+#         return response.choices[0].message.content
+#     except:
+#         return "Perdão. Ocorreu um erro, tente novamente em um minuto."
 
-# A cada mensagem vai realizar o processo de conexão com a open AI
-@bot.event
-async def on_message(message):
-    if message.channel.id == 1208894766511562812:
-        if message.author.bot:
-            return
+# # A cada mensagem vai realizar o processo de conexão com a open AI
+# @bot.event
+# async def on_message(message):
+#     if message.channel.id == 1208894766511562812:
+#         if message.author.bot:
+#             return
 
-        async with message.channel.typing():
-            mensagens = await buscar_historico_canal(message.channel)
-            resposta = ask_gpt(mensagens)
+#         async with message.channel.typing():
+#             mensagens = await buscar_historico_canal(message.channel)
+#             resposta = ask_gpt(mensagens)
 
-            await message.reply(resposta)
+#             await message.reply(resposta)
         
-            await bot.process_commands(message)
-    else:
-        return
+#             await bot.process_commands(message)
+#     else:
+#         return
 
 #endregion Código ChatGPT
 
@@ -231,51 +231,58 @@ class CreateTicket(discord.ui.View):
     await ticket.send(
         f"📩  **|** {interaction.user.mention} ticket criado! Envie todas as informações possíveis sobre seu problema e aguarde até que um atendente responda.\n\nApós a sua questão ser respondida, você pode usar `/fecharticket` para encerrar o atendimento!"
     )
-@bot.tree.command(name='suportesetup',
-            description='Realiza o Setup da mensagem de ajuda.')
+    await ticket.send("<@&1131341624396488824>", delete_after=1.0)
+@bot.tree.command(name='suporte-setup',
+            description='[ADMINS] Realiza o Setup da mensagem de ajuda.')
 @app_commands.describe()
 async def suportesetup(interaction: discord.Interaction):
-  await interaction.response.send_message("Painel Criado", ephemeral=True)
+  if interaction.user.guild_permissions.administrator:
+    await interaction.response.send_message("Painel Criado", ephemeral=True)
 
-  embed = discord.Embed(
-      colour=discord.Color.blurple(),
-      title="Central de Ajuda do Culto",
-      description=
-      "Se você está enfrentando problemas com algum dos nossos serviços, sejam eles jogos, emuladores, softwares ou filmes e séries, sinta-se livre para enviar mensagens aqui marcando os Oráculos ou o Sacerdote para lhe ajudar."
-  )
-  embed.set_image(url="https://i.imgur.com/F9oIRQn.png")
-  await interaction.channel.send(embed=embed, view=DropdownView())
-
+    embed = discord.Embed(
+        colour=discord.Color.blurple(),
+        title="Central de Ajuda do Culto",
+        description=
+        "Se você está enfrentando problemas com algum dos nossos serviços, sejam eles jogos, emuladores, softwares ou filmes e séries, sinta-se livre para enviar mensagens aqui marcando os Oráculos ou o Sacerdote para lhe ajudar."
+    )
+    embed.set_image(url="https://i.imgur.com/F9oIRQn.png")
+    await interaction.channel.send(embed=embed, view=DropdownView())
+  else:
+      await interaction.response.send_message("Você não tem permissão o suficiente para realizar este comando.", ephemeral=True)
 
 @bot.tree.command(name='sugestao-setup',
-              description='Realiza o setup da mensagem de sugestão.')
+              description='[ADMINS] Realiza o setup da mensagem de sugestão.')
 @app_commands.describe()
 async def sugestaosetup(interaction: discord.Interaction):
-  await interaction.response.send_message("Painel Criado", ephemeral=True)
+  if interaction.user.guild_permissions.administrator:
+    await interaction.response.send_message("Painel Criado", ephemeral=True)
 
-  embed = discord.Embed(
-      colour=discord.Color.blurple(),
-      title="Central de Sugestões do Culto",
-      description=
-      "Aqui você pode sugerir ideias de melhorias e realizar pedidos de jogos de computador (ou de emuladores), softwares, filmes e séries e sugerir ideias de eventos."
-  )
-  await interaction.channel.send(embed=embed)
+    embed = discord.Embed(
+        colour=discord.Color.blurple(),
+        title="Central de Sugestões do Culto",
+        description=
+        "Aqui você pode sugerir ideias de melhorias e realizar pedidos de jogos de computador (ou de emuladores), softwares, filmes e séries e sugerir ideias de eventos."
+    )
+    await interaction.channel.send(embed=embed)
+  else:
+    await interaction.response.send_message("Você não tem permissão o suficiente para realizar este comando.", ephemeral=True)
 
-
-@bot.tree.command(name='enquetessetup',
-              description='Realiza o setup da mensagem de enquetes.')
+@bot.tree.command(name='enquete-setup',
+              description='[ADMINS] Realiza o setup da mensagem de enquetes.')
 @app_commands.describe()
 async def enquetessetup(interaction: discord.Interaction):
-  await interaction.response.send_message("Painel Criado", ephemeral=True)
+  if interaction.user.guild_permissions.administrator:
+    await interaction.response.send_message("Painel Criado", ephemeral=True)
 
-  embed = discord.Embed(
-      colour=discord.Color.blurple(),
-      title="Central de Enquetes do Culto",
-      description=
-      "Neste canal, teremos as votações que envolvem o servidor, tais como quais tipos de evento vocês cultistas preferem entre diversas outras coisas. Por motivos específicos, vocês não poderão enviar mensagens aqui, apenas reagir as mensagens enviadas por Oráculos ou ranks superiores."
-  )
-  await interaction.channel.send(embed=embed)
-
+    embed = discord.Embed(
+        colour=discord.Color.blurple(),
+        title="Central de Enquetes do Culto",
+        description=
+        "Neste canal, teremos as votações que envolvem o servidor, tais como quais tipos de evento vocês cultistas preferem entre diversas outras coisas. Por motivos específicos, vocês não poderão enviar mensagens aqui, apenas reagir as mensagens enviadas por Oráculos ou ranks superiores."
+    )
+    await interaction.channel.send(embed=embed)
+  else:
+      await interaction.response.send_message("Você não tem permissão o suficiente para realizar este comando.", ephemeral=True)
 
 @bot.tree.command(name="fecharticket",
               description='Feche um atendimento atual.')
@@ -290,28 +297,53 @@ async def _fecharticket(interaction: discord.Interaction):
   else:
     await interaction.response.send_message("Isso não pode ser feito aqui...")
 
-@bot.tree.command(name='enquete', description='Inicie uma enquete.')
+@bot.tree.command(name='enquete', description='[ADMINS] Inicie uma enquete.')
 @app_commands.describe(
     pergunta = "Pergunta a ser feita na enquete",
     descricao = "Descrição da pergunta",
 )
 async def enquete(interaction: discord.Interaction, *, pergunta: str, descricao: str, imagem: str, custom: bool):
 
-    embed = discord.Embed(
-        colour=discord.Color.blurple(),
-        title= pergunta,
-        description= descricao
-    )
-    embed.set_image(url=imagem)
-    if custom == False:
-        await interaction.response.send_message("Enquete criada", ephemeral=True)
-        msg = await interaction.channel.send(embed=embed)
-        await msg.add_reaction("👍")
-        await msg.add_reaction("👎")
-        await msg.add_reaction("🤷")
+    if interaction.user.guild_permissions.administrator:
+      embed = discord.Embed(
+          colour=discord.Color.blurple(),
+          title= pergunta,
+          description= descricao
+      )
+      embed.set_image(url=imagem)
+      if custom == False:
+          await interaction.response.send_message("Enquete criada", ephemeral=True)
+          msg = await interaction.channel.send(embed=embed)
+          await msg.add_reaction("👍")
+          await msg.add_reaction("👎")
+          await msg.add_reaction("🤷")
+      else:
+          msg = await interaction.channel.send(embed=embed)
     else:
-        msg = await interaction.channel.send(embed=embed)   
+      await interaction.response.send_message("Você não tem permissão o suficiente para realizar este comando.", ephemeral=True)
 
 #endregion SETUP PARA SUPORTE
+
+@bot.tree.command(name='anuncio', description='[ADMINS] Realize um anúncio pela Jo.')
+@app_commands.describe(
+    titulo = "Título do anúncio",
+    descricao = "Descrição do anúncio",
+    imagem = "Url de uma imagem para servir como thumb do anúncio"
+)
+async def enquete(interaction: discord.Interaction, *, titulo: str, descricao: str, imagem: str):
+
+    if interaction.user.guild_permissions.administrator:
+      embed = discord.Embed(
+          colour=discord.Color.blurple(),
+          title= titulo,
+          description= descricao
+      )
+      if imagem.startswith("http"):
+        embed.set_image(url=imagem)
+      msg = await interaction.channel.send(embed=embed)
+      await interaction.response.send_message("Anúncio criado", ephemeral=True)
+      await interaction.channel.send("<@everyone>", delete_after=5.0)
+    else:
+      await interaction.response.send_message("Você não tem permissão o suficiente para realizar este comando.", ephemeral=True)
 
 bot.run(DISCORD_BOT_TOKEN)
