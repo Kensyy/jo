@@ -1,5 +1,4 @@
 import discord
-import openai
 import io
 from dotenv import load_dotenv
 from discord import app_commands
@@ -10,18 +9,14 @@ import os
 
 load_dotenv()
 DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 GUILD_ID = os.getenv("GUILD_ID")
 ID_ATENDENTE = os.getenv("ID_ATENDENTE")
 
 intents = discord.Intents.default()
 intents.messages = True
 intents.message_content = True
-# client = discord.Client(intents=intents)
 
 bot = commands.Bot(command_prefix="!",intents=intents)
-
-openai.api_key=OPENAI_API_KEY
 
 # Inicialização do Bot
 @bot.event
@@ -77,54 +72,6 @@ async def ship(interaction: discord.Interaction,usuario1: discord.User,usuario2:
 
     await interaction.response.send_message(f"**Será que vamos ter um casal novo por aqui?**\n {usuario1.mention} + {usuario2.mention} = ✨ `{nomeship}` ✨\n{mensagem_extra}",file=discord.File(fp=buffer,filename="file.png"))
 #endregion COMANDO DE SHIPPAR
-
-#region Código CHATGPT (NÃO TA FUNCIONANDO VAMOS USAR OLLAMA)
-
-# Busca o histórico de mensagens do canal, sendo o limite 1.
-# async def buscar_historico_canal(canal,limit=1):
-#         messages_list = []
-
-#         async for message in canal.history(limit=limit):
-#             messages_list.append(
-#                 {
-#                     "role":"user" if message.author.bot!=True else "system",
-#                     "content": message.content
-#                 }
-#             )
-#         return messages_list
-
-# # Conexão com a Open
-# def ask_gpt(mensagens):
-#     try:
-#         response = openai.ChatCompletion.create(
-#             messages=mensagens,
-#             model="gpt-3.5-turbo-16k",
-#             temperature=1,
-#             max_tokens=500,
-#         )
-
-#         return response.choices[0].message.content
-#     except:
-#         return "Perdão. Ocorreu um erro, tente novamente em um minuto."
-
-# # A cada mensagem vai realizar o processo de conexão com a open AI
-# @bot.event
-# async def on_message(message):
-#     if message.channel.id == 1208894766511562812:
-#         if message.author.bot:
-#             return
-
-#         async with message.channel.typing():
-#             mensagens = await buscar_historico_canal(message.channel)
-#             resposta = ask_gpt(mensagens)
-
-#             await message.reply(resposta)
-        
-#             await bot.process_commands(message)
-#     else:
-#         return
-
-#endregion Código ChatGPT
 
 #region SETUP PARA SUPORTE
 class Dropdown(discord.ui.Select):
