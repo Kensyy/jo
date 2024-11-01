@@ -1,0 +1,19 @@
+{
+    "mensagens": {
+        "baixo": [
+            "😅 Vish amigos, se pá é melhor ficar sozinho viu...?",
+            "🙈 Força a barra não, zé.",
+            "😬 Esquece isso aí, é só amizade."
+        ],
+        "medio": [
+            "☺️ Até vai, só não seguir o exemplo do Chico Moedas",
+            "😏 Tem potencial, mas ainda é só uma amizade colorida.",
+            "🤔 Quem sabe um dia?"
+        ],
+        "alto": [
+            "😍 Ai sim! Quando vai ser o casamento?",
+            "💖 O amor está no ar! Preparem as alianças!",
+            "🥰 Casal perfeito, hein? Façam filhos imediatamente!"
+        ]
+    }
+}
