@@ -32,7 +32,7 @@ class ShipCommand(commands.Cog):
         fundodraw = ImageDraw.Draw(planodefundo)
         fundodraw.rounded_rectangle(((0,250),(500*(porcentagem/100),289)),fill=(207, 13, 48),radius=5)
 
-        fonte = ImageFont.truetype("RobotoMono-Bold.ttf",20)
+        fonte = ImageFont.truetype("utils\RobotoMono-Bold.ttf",20)
         fundodraw.text((230,250),f"{porcentagem}%",font=fonte)
 
         buffer = io.BytesIO()
