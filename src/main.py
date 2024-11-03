@@ -25,7 +25,6 @@ async def load_cogs():
 @bot.event
 async def on_ready():
     await bot.change_presence(activity=discord.CustomActivity(name="👉 Servidor oficial | https://bit.ly/o-culto-discord"))
-    await bot.tree.sync(guild=discord.Object(id=1044018298951569498))
     try:
         bot.tree.clear_commands(guild=discord.Object(id=1044018298951569498))
         await bot.tree.sync(guild=discord.Object(id=1044018298951569498))
