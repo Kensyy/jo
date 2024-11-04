@@ -1,4 +1,7 @@
 discord
 python-dotenv
+dotenv
 mongo
 pymongo
+pillow
+aiohttp
