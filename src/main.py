@@ -16,12 +16,21 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 async def load_cogs():
     for filename in os.listdir('src/cogs'):
         if filename.endswith('.py'):
-            await bot.load_extension(f'cogs.{filename[:-3]}')
+            try:
+                await bot.load_extension(f'cogs.{filename[:-3]}')
+                print(f"Cog {filename} carregada com sucesso.")
+            except Exception as e:
+                print(f"Erro ao carregar {filename}: {e}")
 
 @bot.event
 async def on_ready():
     await bot.change_presence(activity=discord.CustomActivity(name="👉 Servidor oficial | https://bit.ly/o-culto-discord"))
-    await bot.tree.sync()
+    try:
+        result = await bot.tree.sync()
+        # print(result)
+        
+    except Exception as e:
+        print(f"Erro ao sincronizar slash commands: {e}")
     print(f"A {bot.user.name} está online!")
 
 async def main():

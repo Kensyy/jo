@@ -1,3 +1,7 @@
 discord
-openai==0.28
 python-dotenv
+dotenv
+mongo
+pymongo
+pillow
+aiohttp
