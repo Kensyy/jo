@@ -7,7 +7,7 @@ from discord import app_commands
 class Anuncio(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
+ 
     @app_commands.command(name='anuncio', description='[ADMINS] Realize um anúncio pela Jo.')
     @app_commands.describe(
         titulo="Título do anúncio",

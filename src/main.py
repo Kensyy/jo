@@ -26,14 +26,14 @@ async def load_cogs():
 async def on_ready():
     await bot.change_presence(activity=discord.CustomActivity(name="👉 Servidor oficial | https://bit.ly/o-culto-discord"))
     try:
+        
         result = await bot.tree.sync()
-        # print(result)
         
     except Exception as e:
         print(f"Erro ao sincronizar slash commands: {e}")
     print(f"A {bot.user.name} está online!")
 
-async def main():
+async def main(): 
     await load_cogs()
     await bot.start(DISCORD_BOT_TOKEN)
 

@@ -82,15 +82,6 @@ class Central(commands.Cog):
         else:
             await interaction.response.send_message("Você não tem permissão o suficiente para realizar este comando.", ephemeral=True)
 
-    @app_commands.command(name='sugestao-setup', description='[ADMINS] Realiza o setup da mensagem de sugestão.')
-    async def sugestaosetup(self, interaction: discord.Interaction):
-        if interaction.user.guild_permissions.administrator:
-            await interaction.response.send_message("Painel Criado", ephemeral=True)
-            embed = discord.Embed(colour=discord.Color.blurple(), title="Central de Sugestões do Culto", description="Aqui você pode sugerir ideias de melhorias...")
-            await interaction.channel.send(embed=embed)
-        else:
-            await interaction.response.send_message("Você não tem permissão o suficiente para realizar este comando.", ephemeral=True)
-
     @app_commands.command(name="fecharticket", description='Feche um atendimento atual.')
     async def fecharticket(self, interaction: discord.Interaction):
         mod = interaction.guild.get_role(ID_ATENDENTE)
