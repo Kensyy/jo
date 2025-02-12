@@ -49,7 +49,10 @@ class GameSearch(commands.Cog):
 
         return None
 
-    @app_commands.command(name='game', description='Procura um jogo e retorna o link de download com imagem')
+    @app_commands.command(name='game', description='Procura um jogo e retorna o link de download')
+    @app_commands.describe(
+        game_name="Nome do Jogo a ser procurado.",
+    )
     async def game(self, interaction: discord.Interaction, game_name: str):
         if not game_name:
             await interaction.response.send_message(
@@ -60,34 +63,26 @@ class GameSearch(commands.Cog):
 
         await interaction.response.defer()
         title, download_link = self.search_game(game_name)
-        print("passou do search_game")
+        
         if not title or not download_link:
-            await interaction.response.send_message("❌ Jogo não encontrado nos bancos de dados.")
+            await interaction.followup.send("❌ Jogo não encontrado nos bancos de dados.")
             return
 
-        image_url = self.get_steam_image(game_name) or "https://i.imgur.com/8bQZKus.png"  # Placeholder caso não encontre
+        image_url = self.get_steam_image(game_name) or "https://i.imgur.com/8bQZKus.png"
 
-        print("vai criar o embed")
-
-        # Criando o embed
+        # Criando o embed otimizado
         embed = discord.Embed(
             title=title,
-            color=discord.Color.blue(),
-            description=f"**Baixar Jogo:** [Clique aqui para baixar o jogo]({download_link})"
+            description=f"🔗 Magnet Link ```\n{download_link}\n```\n*Copie e cole no seu cliente de torrent*",
+            color=discord.Color.blue()
         )
         embed.set_image(url=image_url)
-
-        print("criou o embed")
-
+        
         try:
             await interaction.followup.send(embed=embed)
-            await interaction.response.send_message(embed=embed)
-            await interaction.response.send(embed=embed)
-
         except Exception as e:
             print(f"Erro ao enviar a resposta: {e}")
-        await interacton.followup.send_message("Jogo encontrado!", ephemeral=True, delete_after=2.0)
+            await interaction.followup.send("❌ Ocorreu um erro ao exibir o conteúdo.", ephemeral=True)
 
-# Adiciona a Cog ao bot
 async def setup(bot):
     await bot.add_cog(GameSearch(bot))
